@@ -13,4 +13,4 @@ Commands are special types of messages that do something other than sending a me
 
 | Command | Description | Example |
 | ------- | ----------- | ------- |
-| `un` | Change username | `/un testUser` |
+| `un {new username}` | Change username | `/un testUser` |
