@@ -12,9 +12,9 @@ app.get('/', (req, res) => {
 app.use(express.static('static'))
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    io.emit('chat message', "User " + socket.id + " has joined.", "System");
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        io.emit('chat message', "User " + socket.id + " has left.", "System");
     });
     socket.on('chat message', (msg, id) => {
         io.emit('chat message', msg, id);
