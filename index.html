@@ -4,77 +4,7 @@
 <head>
     <title>Socket.IO chat</title>
     <link rel="stylesheet" href="style/apprentice.css">
-    <style>
-        body {
-            margin: 0;
-            padding-bottom: 3rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        #form {
-            padding: 0.25rem;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            height: 3rem;
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-        }
-
-        #input {
-            border: none;
-            padding: 0 1rem;
-            flex-grow: 1;
-            border-radius: 2rem;
-            margin: 0.25rem;
-        }
-
-        #input:focus {
-            outline: none;
-        }
-
-        #form>button {
-            border: none;
-            padding: 0 1rem;
-            margin: 0.25rem;
-            border-radius: 3px;
-            outline: none;
-        }
-
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #messages>table {
-            padding: 0.5rem 1rem;
-        }
-
-        #messages>table:nth-child(even) {
-            background-color: #1C1C1C;
-        }
-
-        table {
-            width: 100%;
-            border: none !important;
-        }
-
-        .username {
-            border: none !important;
-            border-right: solid 1px #444444 !important;
-            float: top;
-            width: 200px;
-        }
-
-        .message {
-            border: none !important;
-            border-left: solid 1px #444444 !important;
-            padding-left: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
@@ -86,58 +16,7 @@
         <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-        var username = "unknown";
-        socket.on("connect", () => {
-            username = socket.id;
-        });
-
-        var table = document.getElementById('messages');
-        var form = document.getElementById('form');
-        var input = document.getElementById('input');
-
-        function gotMessage(msg, id) {
-            var row = document.createElement('tr');
-            var username = document.createElement('td');
-            var message = document.createElement('td');
-            username.textContent = id;
-            username.className = "username";
-            message.textContent = msg;
-            message.className = "message";
-            row.appendChild(username);
-            row.appendChild(message);
-            table.appendChild(row);
-            window.scrollTo(0, document.body.scrollHeight);
-            return row;
-        }
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            if (input.value) {
-                if (input.value[0] == '/') {
-                    var argv = input.value.split(" ");
-                    if (argv[0] == "/un") {
-                        username = argv[1];
-                        var message = gotMessage("Successfully changed username to " + argv[1], "System");
-                    } else {
-                        var message = gotMessage("Unknown command " + argv[0], "System");
-                    }
-                    input.value = '';
-                    setTimeout(function() {
-                        message.parentNode.removeChild(message);
-                    }, 3000);
-                } else {
-                    socket.emit('chat message', input.value, username);
-                    input.value = '';
-                }
-            }
-        });
-
-        socket.on('chat message', function (msg, id) {
-            gotMessage(msg, id);
-        });
-    </script>
+    <script src="/script/script.js"></script>
 </body>
 
 </html>
