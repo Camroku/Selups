@@ -9,7 +9,7 @@ You need `npm` and `nodejs`.
 3. Run `node index.js` to start the app.
 
 ## Chat commands
-Commands are special types of messages that do something other than sending a message. Commands start with `/`
+Commands are special types of messages that do something other than sending a message. They may send system message to indicate the result of that command. Commands start with `/`
 
 | Command | Description | Example |
 | ------- | ----------- | ------- |
