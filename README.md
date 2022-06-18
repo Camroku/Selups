@@ -9,8 +9,4 @@ You need `npm` and `nodejs`.
 3. Run `node index.js` to start the app.
 
 ## Chat commands
-Commands are special types of messages that do something other than sending a message. They may send system messages that other users don't see to indicate the result of that command. Commands start with `/`
-
-| Command | Description | Example |
-| ------- | ----------- | ------- |
-| `un {new username}` | Change username | `/un testUser` |
+Commands are special types of messages that do something other than sending a message. They may send system messages that other users don't see to indicate the result of that command. Commands start with `/`. You can type `/help` to get a list of commands with their descriptions.
