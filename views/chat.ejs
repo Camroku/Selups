@@ -3,20 +3,16 @@
 
 <head>
     <title>Socket.IO chat</title>
-    <link rel="stylesheet" href="style/apprentice.css">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="/style/apprentice.css">
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 
 <body>
     <table id="messages">
         <tbody>
-            <tr>
-                <td class="username">System</td>
-                <td class="message">Welcome!</td>
-            </tr>
         </tbody>
     </table>
-    <form id="form" action="">
+    <form id="form" action="" data-username="<%= username %>">
         <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>

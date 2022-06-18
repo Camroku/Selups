@@ -1,12 +1,10 @@
-var socket = io();
-var username = "unknown";
-socket.on("connect", () => {
-    username = socket.id;
-});
-
 var table = document.getElementById('messages');
 var form = document.getElementById('form');
 var input = document.getElementById('input');
+
+var username = form.dataset.username;
+
+var socket = io(window.location.origin, {query: "username=" + username});
 
 function gotMessage(msg, id) {
     var row = document.createElement('tr');
@@ -28,16 +26,8 @@ form.addEventListener('submit', function (e) {
     if (input.value) {
         if (input.value[0] == '/') {
             var argv = input.value.split(" ");
-            if (argv[0] == "/un") {
-                if (argv[1] == "System") {
-                    var message = gotMessage("Inavailable username " + argv[1], "System");
-                    setTimeout(function () {
-                        message.parentNode.removeChild(message);
-                    }, 3000);
-                } else {
-                    socket.emit('chat message', username + " has changed their username to " + argv[1], "System");
-                    username = argv[1];
-                }
+            if (argv[0] == "/help") {
+                gotMessage("There are not any commands yet.", "System");
             } else {
                 var message = gotMessage("Unknown command " + argv[0], "System");
                 setTimeout(function () {
