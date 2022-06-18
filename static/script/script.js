@@ -29,15 +29,22 @@ form.addEventListener('submit', function (e) {
         if (input.value[0] == '/') {
             var argv = input.value.split(" ");
             if (argv[0] == "/un") {
-                username = argv[1];
-                var message = gotMessage("Successfully changed username to " + argv[1], "System");
+                if (argv[1] == "System") {
+                    var message = gotMessage("Inavailable username " + argv[1], "System");
+                    setTimeout(function () {
+                        message.parentNode.removeChild(message);
+                    }, 3000);
+                } else {
+                    socket.emit('chat message', username + " has changed their username to " + argv[1], "System");
+                    username = argv[1];
+                }
             } else {
                 var message = gotMessage("Unknown command " + argv[0], "System");
+                setTimeout(function () {
+                    message.parentNode.removeChild(message);
+                }, 3000);
             }
             input.value = '';
-            setTimeout(function () {
-                message.parentNode.removeChild(message);
-            }, 3000);
         } else {
             socket.emit('chat message', input.value, username);
             input.value = '';
