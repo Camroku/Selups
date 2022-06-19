@@ -54,7 +54,7 @@ table {
 
 .username {
     border: none !important;
-    float: top;
+    vertical-align: text-top;
     width: 200px;
     background-color: #1C1C1C;
     font-family: monospace;
