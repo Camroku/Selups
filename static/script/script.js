@@ -6,6 +6,8 @@ var username = form.dataset.username;
 
 var socket = io(window.location.origin, {query: "username=" + username});
 
+window.scrollTo(0, document.body.scrollHeight);
+
 function gotMessage(msg, id) {
     var row = document.createElement('tr');
     var username = document.createElement('td');
