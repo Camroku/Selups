@@ -13,6 +13,7 @@ function gotMessage(msg, id) {
     username.textContent = id;
     username.className = "username";
     message.textContent = msg;
+    message.innerHTML = message.innerHTML.replace(/(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)[-A-Z0-9+&@#%?\/=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1' target='_blank'>$1</a>");
     message.className = "message";
     row.appendChild(username);
     row.appendChild(message);
