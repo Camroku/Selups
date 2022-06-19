@@ -14,36 +14,53 @@ app.use(session({
   saveUninitialized: true
 }));
 
+var users = {};
+var messages = [];
+
 app.get('/', (req, res) => {
-    res.redirect('/login');
+    return res.redirect('/login');
 });
 
 app.get('/login', (req, res) => {
+    if (req.session.username != null) {
+        return res.redirect('/chat');
+    }
     res.render('login');
 });
 
 app.post('/login', (req, res) => {
     req.session.username = req.body.username;
-    res.redirect('/chat');
+    return res.redirect('/chat');
 });
 
 app.get('/chat', (req, res) => {
     if (req.session.username == null) {
-        res.redirect('/login');
+        return res.redirect('/login');
     }
-    res.render('chat', { username: req.session.username });
+    res.render('chat', { username: req.session.username, messages: messages });
 });
 
 app.use(express.static('static'))
 
 io.on('connection', (socket) => {
     var username = socket.request._query['username'];
-    io.emit('chat message', "User " + username + " has joined.", "System");
+    users[socket.id] = username;
+    var msg = "User " + username + " has joined.";
+    messages.push({id: "System", msg: msg});
+    io.emit('chat message', msg, "System");
     socket.on('disconnect', () => {
-        io.emit('chat message', "User " + username + " has left.", "System");
+        delete users[socket.id];
+        var msg = "User " + username + " has left.";
+        messages.push({id: "System", msg: msg});
+        io.emit('chat message', msg, "System");
     });
     socket.on('chat message', (msg, id) => {
+        messages.push({id: id, msg: msg});
         io.emit('chat message', msg, id);
+    });
+    socket.on('get online', () => {
+        var userstr = Object.values(users).join(", ")
+        io.to(socket.id).emit('sys message', "Online: " + userstr, "System");
     });
 });
 

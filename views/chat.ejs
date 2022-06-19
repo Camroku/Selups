@@ -9,7 +9,13 @@
 
 <body>
     <table id="messages">
-        <tbody>
+        <tbody id="mtb">
+            <% for(var i=0; i < messages.length; i++) { %>
+            <tr>
+                <td class="username"><%= messages[i].id %></td>
+                <td class="message"><%= messages[i].msg %></td>
+            </tr>
+            <% } %>
         </tbody>
     </table>
     <form id="form" action="" data-username="<%= username %>">

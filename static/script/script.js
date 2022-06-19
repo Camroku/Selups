@@ -1,4 +1,4 @@
-var table = document.getElementById('messages');
+var tbody = document.getElementById('mtb');
 var form = document.getElementById('form');
 var input = document.getElementById('input');
 
@@ -14,10 +14,11 @@ function gotMessage(msg, id) {
     username.className = "username";
     message.textContent = msg;
     message.innerHTML = message.innerHTML.replace(/(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)[-A-Z0-9+&@#%?\/=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1' target='_blank'>$1</a>");
+    message.innerHTML = message.innerHTML.replace(/&lt;br&gt;/g, "<br>");
     message.className = "message";
     row.appendChild(username);
     row.appendChild(message);
-    table.appendChild(row);
+    tbody.appendChild(row);
     window.scrollTo(0, document.body.scrollHeight);
     return row;
 }
@@ -28,7 +29,9 @@ form.addEventListener('submit', function (e) {
         if (input.value[0] == '/') {
             var argv = input.value.split(" ");
             if (argv[0] == "/help") {
-                gotMessage("There are not any commands yet.", "System");
+                gotMessage("Commands:<br>who - Get a list of online users", "System");
+            } else if (argv[0] == "/who") {
+                socket.emit('get online');
             } else {
                 var message = gotMessage("Unknown command " + argv[0], "System");
                 setTimeout(function () {
@@ -44,5 +47,9 @@ form.addEventListener('submit', function (e) {
 });
 
 socket.on('chat message', function (msg, id) {
+    gotMessage(msg, id);
+});
+
+socket.on('sys message', function (msg, id) {
     gotMessage(msg, id);
 });
