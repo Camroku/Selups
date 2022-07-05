@@ -8,6 +8,19 @@ var socket = io(window.location.origin, {query: "username=" + username});
 
 window.scrollTo(0, document.body.scrollHeight);
 
+let context = new AudioContext();
+function beep(freq, duration, vol) {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.connect(gain);
+    oscillator.frequency.value = freq;
+    oscillator.type = "square";
+    gain.connect(context.destination);
+    gain.gain.value = vol * 0.01;
+    oscillator.start(context.currentTime);
+    oscillator.stop(context.currentTime + duration * 0.001);
+}
+
 function gotMessage(msg, id) {
     var row = document.createElement('tr');
     var username = document.createElement('td');
@@ -50,6 +63,7 @@ form.addEventListener('submit', function (e) {
 
 socket.on('chat message', function (msg, id) {
     gotMessage(msg, id);
+    beep(75, 45, 5);
 });
 
 socket.on('sys message', function (msg, id) {
