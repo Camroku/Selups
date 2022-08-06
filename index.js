@@ -1,69 +1,76 @@
-const express = require('express');
-const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
+const MessageModel = require("./models/message.js");
 const session = require('express-session');
+const { Server } = require("socket.io");
+const mongoose = require("mongoose");
+const express = require('express');
+const http = require('http');
+
+// MessageModel.deleteMany({}).then(console.log)
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+const { PORT = 3000, MONGO_DB_URL } = process.env;
+const users = {};
+
+mongoose.connect(MONGO_DB_URL);
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
-  secret: 'put-a-really-secret-key-here',
-  resave: false,
-  saveUninitialized: true
+    secret: 'put-a-really-secret-key-here',
+    resave: false,
+    saveUninitialized: true
 }));
+app.use(express.static('static'));
 
-var users = {};
-var messages = [];
 
-app.get('/', (req, res) => {
-    return res.redirect('/login');
-});
+app.get('/', (req, res) => res.redirect('/login'));
 
-app.get('/login', (req, res) => {
-    if (req.session.username != null) {
-        return res.redirect('/chat');
-    }
-    res.render('login');
-});
+app.get('/login', (req, res) => req.session.username
+    ? res.redirect('/chat')
+    : res.render('login'));
 
 app.post('/login', (req, res) => {
     req.session.username = req.body.username;
     return res.redirect('/chat');
 });
 
-app.get('/chat', (req, res) => {
-    if (req.session.username == null) {
+app.get('/chat', async (req, res) => {
+    if (!req.session.username)
         return res.redirect('/login');
-    }
-    res.render('chat', { username: req.session.username, messages: messages });
+
+    res.render('chat', { username: req.session.username, messages: await MessageModel.find() });
 });
 
-app.use(express.static('static'))
 
-io.on('connection', (socket) => {
-    var username = socket.request._query['username'];
+io.on('connection', async socket => {
+    const { username } = socket.request._query;
     users[socket.id] = username;
-    var msg = "User " + username + " has joined.";
-    messages.push({id: "System", msg: msg});
-    io.emit('chat message', msg, "System");
-    socket.on('disconnect', () => {
+
+    io.emit('chat message', await MessageModel.create({ msg: `User ${username} has joined.` }));
+
+    socket.on('disconnect', async () => {
         delete users[socket.id];
-        var msg = "User " + username + " has left.";
-        messages.push({id: "System", msg: msg});
-        io.emit('chat message', msg, "System");
+        io.emit('chat message', await MessageModel.create({ msg: `User ${username} has left.` }));
     });
-    socket.on('chat message', (msg, id) => {
-        messages.push({id: id, msg: msg});
-        io.emit('chat message', msg, id);
-    });
-    socket.on('get online', () => {
-        var userstr = Object.values(users).join(", ")
-        io.to(socket.id).emit('sys message', "Online: " + userstr, "System");
+    socket.on('chat message', async m => io.emit('chat message', await MessageModel.create(m)));
+
+    socket.on('bot', async args => {
+        // example args = ["/bot","online",...String];
+        const command = args.shift();
+        // command = "/bot", args  = ["online", ...String];
+
+        let msg = "Unknown command";
+        if (command === "/who")
+            msg = `Online: ${Object.values(users).join(", ")}`;
+        else if (command === "/ping")
+            msg = `Your ping to server: ${Date.now() - args[0]}ms`;
+
+
+        io.to(socket.id).emit('sys message', await MessageModel.create({ msg }));
+
     });
 });
 
-server.listen(3000, () => {
-    console.log('listening on *:3000');
-});
+server.listen(PORT, () => console.log('listening on port', PORT));

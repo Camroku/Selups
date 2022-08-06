@@ -5,6 +5,7 @@ A chat application written Node.js.
 You need `npm` and `nodejs`.
 
 1. Clone the repository.
+2. Enter your MONGO_DB_URL to `.env`
 2. Run `npm i` in the repository.
 3. Run `node index.js` to start the app.
 
