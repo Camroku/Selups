@@ -10,10 +10,11 @@
 <body>
     <table id="messages">
         <tbody id="mtb">
-            <% for(var i=0; i < messages.length; i++) { %>
+            <% for(const message of messages) { %>
             <tr>
-                <td class="username"><%= messages[i].id %></td>
-                <td class="message"><%= messages[i].msg %></td>
+                <td class="info"><%=  message.id %></td>
+                <td class="info"><%=  message.date %></td>
+                <td class="message"><%=  message.msg %></td>
             </tr>
             <% } %>
         </tbody>
