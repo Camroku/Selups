@@ -28,7 +28,7 @@ form.addEventListener('submit', e => {
         const argv = input.value.split(/ +/g).filter(Boolean);
         if (argv[0] == "/help") {
             // client side, epermal, no body can see
-            gotMessage({ msg: "Commands:<br>who - Get a list of online users" });
+            gotMessage({ msg: "Commands:<br>who - Get a list of online users<br>ping - Server-Client ping" });
         } else if (argv[0] == "/who") {
             // server side, global
             socket.emit('bot', argv);

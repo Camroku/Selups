@@ -9,7 +9,7 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-
+require("dotenv").config();
 const { PORT = 3000, MONGO_DB_URL } = process.env;
 const users = {};
 

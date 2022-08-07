@@ -13,7 +13,7 @@
             <% for(const message of messages) { %>
             <tr>
                 <td class="info"><%=  message.id %></td>
-                <td class="info"><%=  message.date %></td>
+                <td class="info"><%= new Date(message.date).toLocaleString("tr") %></td>
                 <td class="message"><%=  message.msg %></td>
             </tr>
             <% } %>
