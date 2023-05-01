@@ -1,0 +1,12 @@
+.dark-hover:hover {
+  background-color: rgba(0,0,0,0.2);
+}
+
+div:hover > h6 > .visible-hover {
+  opacity: 1;
+}
+
+.visible-hover {
+  opacity: 0;
+}
+

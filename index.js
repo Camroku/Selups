@@ -32,8 +32,14 @@ app.get('/login', (req, res) => req.session.username
     : res.render('login'));
 
 app.post('/login', (req, res) => {
+    // TODO: auth with req.body.password
     req.session.username = req.body.username;
     return res.redirect('/chat');
+});
+
+app.get('/logout', (req, res) => {
+    delete req.session.username;
+    return res.redirect('/');
 });
 
 app.get('/chat', async (req, res) => {
