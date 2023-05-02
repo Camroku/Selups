@@ -11,3 +11,9 @@ You need `npm` and `nodejs`.
 
 ## Chat commands
 Commands are special types of messages that do something other than sending a message. They may send system messages that other users don't see to indicate the result of that command. Commands start with `/`. You can type `/help` to get a list of commands with their descriptions.
+
+## TODO:
+- [ ] Add a class for messages.
+- [ ] Add latelimit and limit for search
+- [ ] Add fetch older messages button
+- [ ] Local Bootstrap

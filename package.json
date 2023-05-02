@@ -1,14 +1,26 @@
 {
     "name": "selups-chat",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A chat application written in Node.js",
+    "author": {
+        "name": "Camroku"
+    },
+    "contributors": [
+        "Akif9748",
+        "Camroku"
+    ],
+    "repository": {
+        "url": "https://github.com/Camroku/Selups.git"
+    },
     "dependencies": {
+        "bcrypt": "^5.1.0",
+        "connect-mongo": "^5.0.0",
         "dotenv": "^16.0.1",
         "ejs": "^3.1.8",
         "express": "^4.18.1",
+        "express-rate-limit": "^6.7.0",
         "express-session": "^1.17.3",
-        "mongodb": "^4.7.0",
-        "mongoose": "^6.5.1",
+        "mongoose": "^7.1.0",
         "socket.io": "^4.5.1"
     }
 }
